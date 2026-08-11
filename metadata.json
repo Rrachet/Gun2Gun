@@ -1,0 +1,6 @@
+{
+  "name": "EA Mobile F2P LiveOps & Content Design Workbench",
+  "description": "A production-grade Mobile F2P Live Service & Content Design suite tailored for EA Game Designer applications. Includes F2P Core Loop Design, LiveOps Event & Quest Balancer, Player Motivation Telemetry Simulator (Bartle Archetypes), AI Economy Tuning, and Playable Mobile F2P Event Demo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
