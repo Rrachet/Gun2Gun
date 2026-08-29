@@ -1,66 +1,64 @@
 # Gun2Gun — AI LiveOps & Game Design Workbench
 
-> An AI-powered engineering prototype for generating structured LiveOps concepts, quests, game-design documents, and economy recommendations from natural-language game context.
+> **A domain-specific AI workbench for turning game context into structured LiveOps and game-design decisions.**
 
-[![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/UI-React-61DAFB?logo=react&logoColor=white)](https://react.dev/)
-[![AI](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
-[![Backend](https://img.shields.io/badge/Server-Express-000000?logo=express&logoColor=white)](https://expressjs.com/)
+Gun2Gun explores how AI can support real product workflows — not by creating another generic chatbot, but by constraining generation around specific game-design tasks.
 
-## Problem
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev/) [![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
 
-LiveOps and game-design teams repeatedly turn product context into event concepts, quests, progression ideas, economy recommendations, and KPI hypotheses. This project explores how an AI workbench can turn that workflow into a structured, repeatable engineering system rather than a generic chatbot.
+## Product problem
+
+LiveOps and game-design teams repeatedly turn product context into event concepts, quests, progression ideas, economy recommendations and KPI hypotheses. That work is structured enough to benefit from software, but open-ended enough to benefit from AI.
+
+Gun2Gun turns that workflow into a repeatable system.
 
 ## What it does
 
-The application exposes a server-side AI endpoint that accepts a request, operation type, and game context, then generates structured Markdown output for:
-
-- **LiveOps event concepts**
-- **Game Design Documents (GDDs)**
-- **Quest and challenge proposals**
-- **Economy and balance analysis**
-- **Retention, ARPU, conversion, and other KPI hypotheses**
-
-The server uses Gemini 2.5 Flash and keeps the model API key on the server rather than exposing it to the browser.
+| Workflow | Output |
+|---|---|
+| LiveOps | Event concepts and operational ideas |
+| GDD | Structured game-design documents |
+| Quests | Objectives, rewards and narrative hooks |
+| Economy | Balance and monetisation recommendations |
+| KPIs | Retention, ARPU, conversion and related hypotheses |
 
 ## Architecture
 
 ```text
-React UI
-   │
-   │ POST /api/ai/liveops
-   ▼
-Express + TypeScript Server
-   │
-   ├── Request/context handling
-   ├── Prompt orchestration
-   └── Error handling
-   │
-   ▼
-Google Gemini API
-   │
-   ▼
-Structured LiveOps / GDD output
+React / Vite UI
+       │
+       │ POST /api/ai/liveops
+       ▼
+Express + TypeScript
+       │
+       ├── Request validation
+       ├── Context handling
+       ├── Task-specific prompt orchestration
+       └── Error handling
+       │
+       ▼
+Gemini API
+       │
+       ▼
+Structured product output
 ```
 
-## AI design
+The model API key stays on the server. The browser never receives the provider secret.
 
-The backend changes the model's instruction based on the requested operation. For example, a GDD request asks for an event summary, player archetypes, progression loop, monetization strategy, and KPI impact; a quest request focuses on player motivation, objectives, rewards, and narrative hooks.
+## Why the architecture matters
 
-This is intentionally domain-specific: the AI is constrained by a game-design workflow instead of being exposed as an unrestricted chat interface.
+The important engineering choice is the **domain boundary around AI**. Instead of exposing an unrestricted model, the backend selects instructions based on the requested workflow and returns structured output suitable for a product workflow.
 
-## Tech stack
+This makes it easier to add:
 
-| Area | Technologies |
-|---|---|
-| Frontend | React, Vite, Tailwind CSS, Motion |
-| Backend | Node.js, Express, TypeScript |
-| AI | Google Gemini API / Gemini 2.5 Flash |
-| Visualisation | Recharts |
-| UI | Lucide React |
-| Build | Vite, esbuild, tsx |
+- structured JSON responses
+- persistence
+- evaluation datasets
+- retrieval over domain documentation
+- usage/cost telemetry
+- authentication and workspace isolation
 
-## Running locally
+## Run locally
 
 ```bash
 git clone https://github.com/Rrachet/Gun2Gun.git
@@ -68,48 +66,38 @@ cd Gun2Gun
 npm install
 ```
 
-Create a `.env` file based on `.env.example` and provide your Gemini API key.
+Create `.env` from `.env.example` and configure the Gemini API key, then run:
 
 ```bash
 npm run dev
 ```
 
-The application runs through the Express/Vite development server.
+Never commit provider keys or other secrets.
 
 ## Engineering considerations
 
-### Server-side API key handling
-
-The Gemini client is initialized from an environment variable on the server. The browser never needs the provider secret.
-
-### Failure handling
-
-The API returns explicit success/error JSON responses and logs provider errors server-side.
-
-### Prompt specialization
-
-Instead of one giant prompt, the backend selects task-specific instructions for GDD, quests, and balance analysis. This makes the system easier to extend with new workflows.
-
-## What I learned
-
-- Integrating an LLM into a real web application.
-- Designing domain-specific AI workflows instead of generic chat.
-- Keeping model credentials server-side.
-- Building API boundaries around AI functionality.
-- Turning unstructured model output into a repeatable product workflow.
+- Server-side provider credentials
+- Explicit API boundary
+- Task-specific prompt orchestration
+- Success/error JSON responses
+- Domain-constrained AI workflows
+- Clear separation between UI and model integration
 
 ## Roadmap
 
 - [ ] Persist generated artifacts and prompt history
-- [ ] Add authentication and workspace/project isolation
-- [ ] Add evaluation datasets for prompt quality
-- [ ] Add structured JSON outputs alongside Markdown
-- [ ] Add retrieval over game-design documentation
-- [ ] Add automated tests for API contracts
-- [ ] Add usage/cost telemetry and rate limiting
+- [ ] Authentication and workspace isolation
+- [ ] Evaluation datasets and automated prompt-quality tests
+- [ ] Structured JSON outputs
+- [ ] Retrieval over game-design documentation
+- [ ] API contract tests
+- [ ] Usage, cost and latency telemetry
+- [ ] Rate limiting
 
-## Author
+## Built by
 
-**Amarnath Mishra** — Computer Science Engineer building full-stack, AI, and data-driven software systems.
+**Amarnath Mishra** — Product Analyst / Product Builder with a full-stack engineering background, interested in AI-native products and practical software systems.
 
-[GitHub](https://github.com/Rrachet)
+## License
+
+MIT
